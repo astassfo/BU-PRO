@@ -8,6 +8,9 @@ unihist = ROOT.TH1F("uniform", "data;x;y", 100, 0, 100)
 for i in range(10000):
     gaushist.Fill(ROOT.gRandom.Gaus(50, 10))
     unihist.Fill(ROOT.gRandom.Uniform(0, 100))
+# normalizing the histograms
+gaushist.Scale(1.0 / gaushist.Integral())
+unihist.Scale(1.0 / unihist.Integral())
 # setting histogram colors and making legend
 gaushist.SetLineColor(ROOT.kBlue)
 unihist.SetLineColor(ROOT.kRed)
@@ -15,8 +18,8 @@ legend = ROOT.TLegend(.15, .7, .3, .85)
 legend.AddEntry(gaushist, "gaussian")
 legend.AddEntry(unihist, "uniform")
 # drawing histograms and legend on same plot
-gaushist.Draw()
-unihist.Draw("SAME")
+gaushist.Draw("HIST") # argument "HIST" to make sure appears as histogram instead of collection of points
+unihist.Draw("HIST SAME")
 legend.Draw("SAME")
 # write histograms to a file
 f = ROOT.TFile("histo.root", "RECREATE") # recreate to override existing histo.root
@@ -26,7 +29,6 @@ unihist.Write()
 f.Close()
 # reading back data from histo.root
 r = ROOT.TFile("histo.root", "READ")
-r.ls()
 # prompting user to give name of histogram they are looking for in histo.root
 fhist = input("enter the histogram you are trying to locate: ")
 lookingfor = r.Get(fhist) # if fhist not in histo.root, then it will hold value "None"
@@ -36,6 +38,7 @@ if lookingfor:
 else:
     print("your histogram was not found in hist.root")
 # closing file
+r.ls()
 r.Close()
 # allows histogram to stay open/be interacted with
 ROOT.gApplication.Run()

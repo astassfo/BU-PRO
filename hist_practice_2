@@ -1,0 +1,27 @@
+import ROOT
+import math
+# code that displays both a poisson and breit-wigner distribution on same graph
+c2 = ROOT.TCanvas("c2", "", 600, 500)
+poishist = ROOT.TH1F("poishist", "poisson vs breit-wigner distribution;x;y", 100, -10, 10)
+bwhist = ROOT.TH1F("bwhist",  "poisson vs breit-wigner distribution;x;y", 100, -10, 10)
+# adding 1000 entries to both distributions
+for i in range(1000):
+    poishist.Fill(ROOT.gRandom.Poisson(2)) # argument is lambda (mean) value; std dev = √5
+    bwhist.Fill(ROOT.gRandom.BreitWigner(-3, 1)) # mean = -3, gamma (width) = 1
+#setting colors to differentiate between the two 
+poishist.SetLineColor(ROOT.kMagenta)
+bwhist.SetLineColor(ROOT.kCyan)
+# rebinning breit-wigner histogram
+bwhist.Rebin(2)
+# fitting gaussian to poishist; extracted parameters appear in terminal
+poishist.Fit("gaus")
+# adding legend
+leg = ROOT.TLegend(.15, .7, .3, .85)
+leg.AddEntry(poishist, "poisson")
+leg.AddEntry(bwhist, "breit-wigner")
+#drawing histograms/legend to canvas
+poishist.Draw()
+bwhist.Draw("SAME")
+leg.Draw("SAME")
+# allows histogram to stay open/be interacted with
+ROOT.gApplication.Run()
