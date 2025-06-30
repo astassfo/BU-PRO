@@ -4,10 +4,11 @@ import math
 c2 = ROOT.TCanvas("c2", "", 600, 500)
 poishist = ROOT.TH1F("poishist", "poisson vs breit-wigner distribution;x;y", 100, -10, 10)
 bwhist = ROOT.TH1F("bwhist",  "poisson vs breit-wigner distribution;x;y", 100, -10, 10)
+bwhist.Sumw2() # enable error calc w/ weights
 # adding 1000 entries to both distributions
 for i in range(1000):
     poishist.Fill(ROOT.gRandom.Poisson(2)) # argument is lambda (mean) value; std dev = √5
-    bwhist.Fill(ROOT.gRandom.BreitWigner(-3, 1)) # mean = -3, gamma (width) = 1
+    bwhist.Fill(ROOT.gRandom.BreitWigner(-3, 1), .6) # mean = -3, gamma (width) = 1; weight = .6
 #setting colors to differentiate between the two 
 poishist.SetLineColor(ROOT.kMagenta)
 bwhist.SetLineColor(ROOT.kCyan)
@@ -21,7 +22,7 @@ leg.AddEntry(poishist, "poisson")
 leg.AddEntry(bwhist, "breit-wigner")
 #drawing histograms/legend to canvas
 poishist.Draw()
-bwhist.Draw("SAME")
+bwhist.Draw("HIST SAME") # argument HIST for formatting
 leg.Draw("SAME")
 # allows histogram to stay open/be interacted with
 ROOT.gApplication.Run()

@@ -37,8 +37,9 @@ if lookingfor:
     print("your histogram was found in histo.root")
 else:
     print("your histogram was not found in hist.root")
-# closing file
+# listing elements of file
 r.ls()
+# closing file
 r.Close()
 # allows histogram to stay open/be interacted with
 ROOT.gApplication.Run()
