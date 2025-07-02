@@ -1,7 +1,7 @@
 import random as rdm
 # code that defines a function that takes in 4 arguments (number of entries in list, bin width, 
 # minimum/maximum random number generated) and outputs a dictionary with keys as bin ranges and values 
-# as the numbers that show up within the given bin range
+# as counts of numbers generated within its keys bin range.
 # NOTE: I am aware that the code is incredibly inefficient.
 def orglist(numentries, binwidth, nummin, nummax):
     mylist = [] # initialize unorganized list
@@ -12,21 +12,27 @@ def orglist(numentries, binwidth, nummin, nummax):
     numkeys = int((nummax-nummin) // binwidth + 1) # for correct range of for loop
     n = 1
     for x in range(numkeys):
-        bin1 = nummin + (n-1)*binwidth # defining vars bin1 and bin2 because they show up a lot in calcs
-        bin2 = nummin + n*binwidth - 1
-        if nummin + n * binwidth <= nummax:
-            mydict[f"{bin1}-{bin2}"] = []
+        count = 0
+        u = nummin + (n-1)*binwidth # defining vars bin1 and bin2 because they show up a lot in calcs
+        v = nummin + n*binwidth
+        # initializing each bin with a count of zero; if-else statement if bin width does not fit evenly 
+        # within minimum/maximum number range
+        if v <= nummax:
+            mydict[f"{u}-{v - 1}"] = count
         else:
-            mydict[f"{bin1}-{nummax}"] = []
+            mydict[f"{u}-{nummax}"] = count
+        # iterating through every element and placing in correct bin
         for element in mylist:
-            if nummin + n * binwidth <= nummax:
-                if element >= bin1 and element < nummin + n*binwidth:
-                    mydict[f"{bin1}-{bin2}"].append(element)
+            if v <= nummax:
+                if element >= u and element < v:
+                    count += 1
+                    mydict[f"{u}-{v - 1}"] = count
             else:
-                if element >= bin1 and element < nummin + n*binwidth:
-                    mydict[f"{bin1}-{nummax}"].append(element)
+                if element >= u and element < v:
+                    count += 1
+                    mydict[f"{u}-{nummax}"] = count
         n += 1
     return mydict
-
-u = orglist(10, 2, 2, 7)
-print(u)
+# print organized dictionary
+example = orglist(5, 3, 1, 10)
+print("organized dictionary:", example)
