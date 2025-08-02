@@ -2,8 +2,8 @@ import ROOT
 import math
 # code that puts data from gluing trials into histogram; overlays 3 data sets
 c = ROOT.TCanvas("c", "", 600, 500)
-hist1 = ROOT.TH1F("GDM", "GDM", 50, 0, 12)
-hist2 = ROOT.TH1F("TECH", "TECH", 50, 0, 12)
+hist1 = ROOT.TH1F("GDM", "GDM", 100, 0, 12)
+hist2 = ROOT.TH1F("TECH", "TECH", 100, 0, 12)
 # open file w/ data
 file1 = open("gdm_data.txt", "r")
 file2 = open("garrett_data.txt", "r")
